@@ -1,0 +1,31 @@
+{
+  "name": "jsfiletools",
+  "version": "1.0.0",
+  "description": "Javascript file tools module",
+  "main": "dist/fileTools.js",
+  "scripts": {
+    "build": "./node_modules/.bin/webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jazhann/fileTools.git"
+  },
+  "keywords": [
+    "Javascript",
+    "file",
+    "tools"
+  ],
+  "author": "Daniel Rodríguez Gómez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Jazhann/fileTools/issues"
+  },
+  "homepage": "https://github.com/Jazhann/fileTools#readme",
+  "devDependencies": {
+    "webpack": "^5.35.1",
+    "webpack-cli": "^4.6.0"
+  },
+  "dependencies": {
+    "mkdirp": "^1.0.4"
+  }
+}
