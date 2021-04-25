@@ -50,7 +50,7 @@ const jsFileTools = require("jsfiletools");
 
 ## jsFileTools.modifyFile
 
-> Replaces a whole text line finded by regex with a string. Allowes multiples replaces. Returns a promise.
+> Replaces a text finded by regex with a string. Allowes multiples replaces. Returns a promise.
 
 
 ## Example
