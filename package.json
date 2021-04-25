@@ -1,6 +1,6 @@
 {
   "name": "jsfiletools",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Javascript file tools module",
   "main": "dist/fileTools.js",
   "scripts": {
