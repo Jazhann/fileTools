@@ -81,7 +81,7 @@ const jsFileTools = require("jsfiletools");
 ## Example
 
 ```javascript
-    jsFileTools.copyFile(dirSrc, dirTarget);
+    jsFileTools.copyRoute(dirSrc, dirTarget);
 ```
 
 ### Source Code
