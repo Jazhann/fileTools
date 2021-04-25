@@ -9,7 +9,7 @@ is a library with methods to works with files.
 ### NPM
 ```bash
 # bash
-npm i fileTools
+npm i jsfiletools
 ```
 
 ```js
