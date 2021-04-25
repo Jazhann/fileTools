@@ -1,5 +1,5 @@
-var fs = require('fs');
-var mkdirp = require('mkdirp');
+var fs = require( 'fs' );
+var mkdirp = require( 'mkdirp' );
 
 /**
  * Read a file 
@@ -7,9 +7,9 @@ var mkdirp = require('mkdirp');
  */
 function readFile( src ) {
     return new Promise( function ( resolve, reject ) {
-        fs.readFile(src, 'utf8', function (err, data) {
-            if ( err )
-                reject( err );
+        fs.readFile( src, 'utf8', function ( error, data ) {
+            if ( error )
+                reject( error );
             else
                 resolve( data );
         });
@@ -23,9 +23,9 @@ function readFile( src ) {
  */
 function writeFile( src, data ) {
     return new Promise( function( resolve, reject ) {
-      fs.writeFile( src, data, 'utf8', function(err ) {
-        if ( err )
-          reject( err );
+      fs.writeFile( src, data, 'utf8', function( error ) {
+        if ( error )
+          reject( error );
         else
           resolve( { response: 'ok' } );
       });
@@ -34,17 +34,16 @@ function writeFile( src, data ) {
 
 
 /**
- * Search and modify two differents strings from a file for to differents strings
+ * Search and modify a string from a file with a different string
  * @param {*} src file source
  * @param {*} stringsToReplace array with strings to replace format [["string to replace","replacing string" ]]
  */
-async function modifyFile (src, stringsToReplace ) {
-    if (fs.existsSync(src) && Array.isArray(stringsToReplace)) {
+async function modifyFile ( src, stringsToReplace ) {
+    if (fs.existsSync( src ) && Array.isArray( stringsToReplace )) {
         console.log( 'Modifying ' + src ); 
         let data = await readFile( src );
         data = data.toString();
         stringsToReplace.forEach( element => {
-
             var reg = new RegExp( element[0], "gm" );
             data = data.replace( reg, element[1] );            
         })
@@ -59,24 +58,24 @@ async function modifyFile (src, stringsToReplace ) {
  * @param {*} src source file 
  * @param {*} target target file
  */
-function copyFile(src, target, createParentDir = true) {
-   if (fs.existsSync(src)) {
-      var getDirName = require('path').dirname;
-      var destDir = getDirName(target);
-      if (!fs.existsSync(destDir)) {
+function copyFile( src, target, createParentDir = true ) {
+   if (fs.existsSync( src )) {
+      var getDirName = require( 'path' ).dirname;
+      var destDir = getDirName( target );
+      if (!fs.existsSync( destDir )) {
          if (createParentDir) {
-            console.log('Creating directory ' + destDir);
-            mkdirp.sync(destDir);
+            console.log( 'Creating directory ' + destDir );
+            mkdirp.sync( destDir );
          } else {
-            console.log('Parent directory ' + destDir + ' does NOT exist and not required to create it. Skipping to copy file ' + src + ' to ' + target);
+            console.log( 'Skipping copying file ' + src + ' to ' + target );
             return;
          }
 
       }
-      console.log('Copying ' + src + ' to ' + target);
-      fs.createReadStream(src).pipe(fs.createWriteStream(target));
+      console.log( 'Copying ' + src + ' to ' + target );
+      fs.createReadStream( src ).pipe( fs.createWriteStream( target ) );
    } else {
-      console.log(src + ' not found. Skipping');
+      console.log( src + ' not found. Skipping' );
    }
 }
 
@@ -85,22 +84,22 @@ function copyFile(src, target, createParentDir = true) {
  * @param {*} src source directory
  * @param {*} target target directory
  */
-function copyRoute( src, target, recursive=true ) {
+function copyDir( src, target, recursive = true ) {
     var files = [];
     if ( fs.existsSync( src ) && fs.existsSync( target )) {
         files = fs.readdirSync( src );
         files.forEach( function ( file ) {
             var fileSrc = src + '/' + file;
             var fileDest = target + '/' + file ;
-            if (fs.lstatSync(fileSrc).isDirectory() && recursive) {
-               if (!fs.existsSync( fileDest )) {
+            if ( fs.lstatSync( fileSrc ).isDirectory() && recursive ) {
+               if ( !fs.existsSync( fileDest )) {
                   console.log( 'Creating directory ' + fileDest );
-                  fs.mkdirSync(fileDest);
+                  fs.mkdirSync( fileDest );
                }
-               copyFiles(fileSrc, fileDest);
+               copyFiles( fileSrc, fileDest );
             } else {               
                console.log( 'Copying ' + fileSrc + ' to ' + fileDest );
-               fs.createReadStream(fileSrc).pipe(fs.createWriteStream (fileDest));
+               fs.createReadStream( fileSrc ).pipe( fs.createWriteStream( fileDest ) );
             }
             
         } );
@@ -110,4 +109,4 @@ function copyRoute( src, target, recursive=true ) {
 }
 
 
-module.exports = {  readFile, writeFile, modifyFile, copyFile, copyRoute };
+module.exports = {  readFile, writeFile, modifyFile, copyFile, copyDir };

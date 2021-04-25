@@ -23,7 +23,7 @@ const jsFileTools = require("jsfiletools");
 - writeFile
 - modifyFile
 - copyFile
-- copyRoute
+- copyDir
 
 ## jsFileTools.readFile
 
@@ -73,7 +73,7 @@ const jsFileTools = require("jsfiletools");
     jsFileTools.copyFile(fileSrc, fileTarget);
 ```
 
-## jsFileTools.copyRoute
+## jsFileTools.copyDir
 
 > Copies a directory to another one recursively
 
@@ -81,7 +81,7 @@ const jsFileTools = require("jsfiletools");
 ## Example
 
 ```javascript
-    jsFileTools.copyRoute(dirSrc, dirTarget);
+    jsFileTools.copyDir(dirSrc, dirTarget);
 ```
 
 ### Source Code
