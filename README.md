@@ -85,7 +85,7 @@ const jsFileTools = require("jsfiletools");
 ```
 
 ### Source Code
-[fileTools()](https://github.com/Jazhann/fileTools)
+[fileTools()](https://github.com/Jazhann/jsfiletools)
 
 ## Contribution Notes
 Clone project on [github](https://github.com/Jazhann/fileTools)
