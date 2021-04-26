@@ -6,8 +6,8 @@ module.exports = {
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'fileTools.js',
-    library: "fileTools",
+    filename: 'jsFileTools.js',
+    library: "jsFileTools",
     libraryTarget: 'umd',
     globalObject: 'this'
   },
