@@ -2,13 +2,13 @@ var fs = require( 'fs' );
 var mkdirp = require( 'mkdirp' );
 
 
-var jsFileTools = function () {};
+var JsFileTools = function () {};
 
 /**
  * Read a file 
  * @param {*} src file source
  */
-jsFileTools.prototype.readFile = function ( src )  {
+JsFileTools.prototype.readFile = function ( src )  {
     return new Promise( function ( resolve, reject ) {
         fs.readFile( src, 'utf8', function ( error, data ) {
             if ( error )
@@ -24,7 +24,7 @@ jsFileTools.prototype.readFile = function ( src )  {
  * @param {*} src file source
  * @param {*} data data to write
  */
-jsFileTools.prototype.writeFile = function ( src, data ) {
+JsFileTools.prototype.writeFile = function ( src, data ) {
     return new Promise( function( resolve, reject ) {
       fs.writeFile( src, data, 'utf8', function( error ) {
         if ( error )
@@ -41,7 +41,7 @@ jsFileTools.prototype.writeFile = function ( src, data ) {
  * @param {*} src file source
  * @param {*} stringsToReplace array with strings to replace format [["string to replace","replacing string" ]]
  */
-jsFileTools.prototype.modifyFile = async function ( src, stringsToReplace ) {
+JsFileTools.prototype.modifyFile = async function ( src, stringsToReplace ) {
     if ( !Array.isArray( stringsToReplace ) && stringsToReplace.length < 1) {
         throw new Error('second argument must be an array and not being empty');
     } 
@@ -64,7 +64,7 @@ jsFileTools.prototype.modifyFile = async function ( src, stringsToReplace ) {
  * @param {*} src source file 
  * @param {*} target target file
  */
-jsFileTools.prototype.copyFile = function ( src, target, createParentDir = true ) {
+JsFileTools.prototype.copyFile = function ( src, target, createParentDir = true ) {
    if (fs.existsSync( src )) {
       var getDirName = require( 'path' ).dirname;
       var destDir = getDirName( target );
@@ -88,7 +88,7 @@ jsFileTools.prototype.copyFile = function ( src, target, createParentDir = true 
  * @param {*} src source directory
  * @param {*} target target directory
  */
-jsFileTools.prototype.copyDir = function ( src, target, recursive = true ) {
+JsFileTools.prototype.copyDir = function ( src, target, recursive = true ) {
     var files = [];
     if ( fs.existsSync( src ) && fs.existsSync( target )) {
         files = fs.readdirSync( src );
@@ -113,4 +113,4 @@ jsFileTools.prototype.copyDir = function ( src, target, recursive = true ) {
 }
 
 
-module.exports = (jsFileTools)();
+module.exports = new JsFileTools();
