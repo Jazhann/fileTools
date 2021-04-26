@@ -1,11 +1,14 @@
 var fs = require( 'fs' );
 var mkdirp = require( 'mkdirp' );
 
+
+var jsFileTools = ( function () {} ) ();
+
 /**
  * Read a file 
  * @param {*} src file source
  */
-function readFile( src ) {
+jsFileTools.prototype.readFile = function ( src )  {
     return new Promise( function ( resolve, reject ) {
         fs.readFile( src, 'utf8', function ( error, data ) {
             if ( error )
@@ -21,7 +24,7 @@ function readFile( src ) {
  * @param {*} src file source
  * @param {*} data data to write
  */
-function writeFile( src, data ) {
+jsFileTools.prototype.writeFile = function ( src, data ) {
     return new Promise( function( resolve, reject ) {
       fs.writeFile( src, data, 'utf8', function( error ) {
         if ( error )
@@ -38,10 +41,13 @@ function writeFile( src, data ) {
  * @param {*} src file source
  * @param {*} stringsToReplace array with strings to replace format [["string to replace","replacing string" ]]
  */
-async function modifyFile ( src, stringsToReplace ) {
-    if (fs.existsSync( src ) && Array.isArray( stringsToReplace )) {
-        console.log( 'Modifying ' + src ); 
-        let data = await readFile( src );
+jsFileTools.prototype.modifyFile = async function ( src, stringsToReplace ) {
+    if ( !Array.isArray( stringsToReplace ) && stringsToReplace.length < 1) {
+        throw new Error('second argument must be an array and not being empty');
+    } 
+    if (fs.existsSync( src )) {
+        console.info( 'Modifying ' + src );
+        var data = await readFile( src );
         data = data.toString();
         stringsToReplace.forEach( element => {
             var reg = new RegExp( element[0], "gm" );
@@ -49,7 +55,7 @@ async function modifyFile ( src, stringsToReplace ) {
         })
         await writeFile( src, data );
     } else {
-        console.log( src + ' not found. Skipping' );
+        console.info( src + ' not found. Skipping' );
     }
 }
 
@@ -58,24 +64,22 @@ async function modifyFile ( src, stringsToReplace ) {
  * @param {*} src source file 
  * @param {*} target target file
  */
-function copyFile( src, target, createParentDir = true ) {
+jsFileTools.prototype.copyFile = function ( src, target, createParentDir = true ) {
    if (fs.existsSync( src )) {
       var getDirName = require( 'path' ).dirname;
       var destDir = getDirName( target );
       if (!fs.existsSync( destDir )) {
-         if (createParentDir) {
-            console.log( 'Creating directory ' + destDir );
-            mkdirp.sync( destDir );
-         } else {
-            console.log( 'Skipping copying file ' + src + ' to ' + target );
+        if (!createParentDir) {
+            console.info( 'Skipping copying file ' + src + ' to ' + target );
             return;
-         }
-
+        }
+        console.info( 'Creating directory ' + destDir );
+        mkdirp.sync( destDir );
       }
-      console.log( 'Copying ' + src + ' to ' + target );
+      console.info( 'Copying ' + src + ' to ' + target );
       fs.createReadStream( src ).pipe( fs.createWriteStream( target ) );
    } else {
-      console.log( src + ' not found. Skipping' );
+      console.info( src + ' not found. Skipping' );
    }
 }
 
@@ -84,7 +88,7 @@ function copyFile( src, target, createParentDir = true ) {
  * @param {*} src source directory
  * @param {*} target target directory
  */
-function copyDir( src, target, recursive = true ) {
+jsFileTools.prototype.copyDir = function ( src, target, recursive = true ) {
     var files = [];
     if ( fs.existsSync( src ) && fs.existsSync( target )) {
         files = fs.readdirSync( src );
@@ -104,9 +108,9 @@ function copyDir( src, target, recursive = true ) {
             
         } );
     } else {
-        console.log( src + ' not found. Skipping' );
+        console.info( src + ' not found. Skipping' );
     }
 }
 
 
-module.exports = {  readFile, writeFile, modifyFile, copyFile, copyDir };
+module.exports = jsFileTools;
