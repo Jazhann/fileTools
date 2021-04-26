@@ -2,7 +2,7 @@ var fs = require( 'fs' );
 var mkdirp = require( 'mkdirp' );
 
 
-var jsFileTools = ( function () {} ) ();
+var jsFileTools = function () {};
 
 /**
  * Read a file 
@@ -113,4 +113,4 @@ jsFileTools.prototype.copyDir = function ( src, target, recursive = true ) {
 }
 
 
-module.exports = jsFileTools;
+module.exports = (jsFileTools)();
