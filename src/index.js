@@ -55,7 +55,9 @@ JsFileTools.prototype.modifyFile = async function ( src, stringsToReplace ) {
         })
         await JsFileTools.prototype.writeFile( src, data );
     } else {
-        console.info( src + ' not found. Skipping' );
+        var message = src + ' not found. Skipping';
+        console.info( message );
+        throw new Error( message )
     }
 }
 
@@ -65,22 +67,28 @@ JsFileTools.prototype.modifyFile = async function ( src, stringsToReplace ) {
  * @param {*} target target file
  */
 JsFileTools.prototype.copyFile = function ( src, target, createParentDir = true ) {
-   if (fs.existsSync( src )) {
-      var getDirName = require( 'path' ).dirname;
-      var destDir = getDirName( target );
-      if (!fs.existsSync( destDir )) {
-        if (!createParentDir) {
-            console.info( 'Skipping copying file ' + src + ' to ' + target );
-            return;
+    return new Promise( function( resolve, reject ) {
+        if (fs.existsSync( src )) {
+            var getDirName = require( 'path' ).dirname;
+            var destDir = getDirName( target );
+            if (!fs.existsSync( destDir )) {
+                if (!createParentDir) {
+                    var message = 'Skipping copying file ' + src + ' to ' + target;
+                    console.info( message );
+                    reject( message );
+                }
+                console.info( 'Creating directory ' + destDir );
+                mkdirp.sync( destDir );
+            }
+            console.info( 'Copying ' + src + ' to ' + target );
+            fs.createReadStream( src ).pipe( fs.createWriteStream( target ) );
+            resolve( { response: 'ok' } );
+        } else {
+            var message = src + ' not found. Skipping';
+            console.info( message );
+            reject( message );
         }
-        console.info( 'Creating directory ' + destDir );
-        mkdirp.sync( destDir );
-      }
-      console.info( 'Copying ' + src + ' to ' + target );
-      fs.createReadStream( src ).pipe( fs.createWriteStream( target ) );
-   } else {
-      console.info( src + ' not found. Skipping' );
-   }
+    })
 }
 
 /**
@@ -89,26 +97,43 @@ JsFileTools.prototype.copyFile = function ( src, target, createParentDir = true 
  * @param {*} target target directory
  */
 JsFileTools.prototype.copyDir = function ( src, target, recursive = true ) {
-    if ( fs.existsSync( src ) && fs.existsSync( target )) {
-        var files = fs.readdirSync( src );
-        files.forEach( function ( file ) {
-            var fileSrc = src + '/' + file;
-            var fileDest = target + '/' + file ;
-            if ( fs.lstatSync( fileSrc ).isDirectory() && recursive ) {
-               if ( !fs.existsSync( fileDest )) {
-                  console.info( 'Creating directory ' + fileDest );
-                  fs.mkdirSync( fileDest );
-               }
-               JsFileTools.prototype.copyDir( fileSrc, fileDest );
-            } else {               
-               console.info( 'Copying ' + fileSrc + ' to ' + fileDest );
-               fs.createReadStream( fileSrc ).pipe( fs.createWriteStream( fileDest ) );
-            }
-            
-        } );
-    } else {
-        console.info( src + ' not found. Skipping' );
-    }
+    return new Promise( function( resolve, reject ) {
+        if ( fs.existsSync( src ) && fs.existsSync( target ) ) {
+            var files = fs.readdirSync( src );
+            files.forEach( function ( file ) {
+                var fileSrc = src + '/' + file;
+                var fileDest = target + '/' + file ;
+                if ( fs.lstatSync( fileSrc ).isDirectory() && recursive ) {
+                if ( !fs.existsSync( fileDest )) {
+                    console.info( 'Creating directory ' + fileDest );
+                    fs.mkdirSync( fileDest );
+                }
+                JsFileTools.prototype.copyDir( fileSrc, fileDest );
+                } else {               
+                    console.info( 'Copying ' + fileSrc + ' to ' + fileDest );
+                    fs.createReadStream( fileSrc ).pipe( fs.createWriteStream( fileDest ) );
+                }
+            } );
+            resolve( { response: 'ok' } );
+        } else {
+            var message = src + ' not found. Skipping';
+            console.info( message );
+            reject( message );
+        }
+    })
+}
+
+JsFileTools.prototype.deleteFile = function ( src ) {
+    return new Promise( function( resolve, reject ) {
+        try {
+            fs.unlinkSync(src);
+            console.info("File removed:", src);
+            resolve( { response: 'ok' } );
+          } catch (error) {
+            console.error(error);
+            reject(error)
+          }
+    })
 }
 
 

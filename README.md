@@ -33,7 +33,9 @@ const jsFileTools = require("jsfiletools");
 ## Example
 
 ```javascript
+    var src = './example.js';
     var fileData = await jsFileTools.readFile(src);
+    // fileData type is string
 ```
 
 ## jsFileTools.writeFile
@@ -45,7 +47,10 @@ const jsFileTools = require("jsfiletools");
 
 ```javascript
     // src param - include route and file name
-    await jsFileTools.writeFile(src, fileData);
+    var src = './example.js';
+    var fileData = 'some random content';
+    // fileData type is string
+    var result = await jsFileTools.writeFile(src, fileData);
 ```
 
 ## jsFileTools.modifyFile
@@ -56,32 +61,51 @@ const jsFileTools = require("jsfiletools");
 ## Example
 
 ```javascript
+    var fileSrc = './example.js';
     var dataToReplace = [
-    ["^.*TextToReplace.*", "ReplacementText"]
+        ['^.*TextToReplace.*', 'ReplacementText']
     ]
-    await jsFileTools.modifyFile(fileSrc, dataToReplace);
+    var result = await jsFileTools.modifyFile(fileSrc, dataToReplace);
 ```
 
 ## jsFileTools.copyFile
 
-> Copies a file form a source to another one.
+> Copies a file form a source to another one. Returns a promise.
 
 
 ## Example
 
 ```javascript
-    jsFileTools.copyFile(fileSrc, fileTarget);
+    // fileSrc and fileTarget params - include route and file name
+    var fileSrc = './example.js';
+    var fileTarget = './newDir/example.js';
+    var result = await jsFileTools.copyFile(fileSrc, fileTarget);
 ```
 
 ## jsFileTools.copyDir
 
-> Copies a directory to another one recursively
+> Copies a directory to another one recursively. Returns a promise.
 
 
 ## Example
 
 ```javascript
-    jsFileTools.copyDir(dirSrc, dirTarget);
+    var fileSrc = './example';
+    var fileTarget = '../newDir';
+    var result = await jsFileTools.copyDir(dirSrc, dirTarget);
+```
+
+## jsFileTools.deleteFile
+
+> Delete a file. Returns a promise.
+
+
+## Example
+
+```javascript
+    // fileSrc param - include route and file name
+    var fileSrc = './example.js';
+    var result = await jsFileTools.deleteFile(fileSrc);
 ```
 
 ### Source Code
