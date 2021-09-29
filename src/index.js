@@ -47,13 +47,13 @@ JsFileTools.prototype.modifyFile = async function ( src, stringsToReplace ) {
     } 
     if (fs.existsSync( src )) {
         console.info( 'Modifying ' + src );
-        var data = await readFile( src );
+        var data = await JsFileTools.prototype.readFile( src );
         data = data.toString();
         stringsToReplace.forEach( element => {
             var reg = new RegExp( element[0], "gm" );
             data = data.replace( reg, element[1] );            
         })
-        await writeFile( src, data );
+        await JsFileTools.prototype.writeFile( src, data );
     } else {
         console.info( src + ' not found. Skipping' );
     }
@@ -89,20 +89,19 @@ JsFileTools.prototype.copyFile = function ( src, target, createParentDir = true 
  * @param {*} target target directory
  */
 JsFileTools.prototype.copyDir = function ( src, target, recursive = true ) {
-    var files = [];
     if ( fs.existsSync( src ) && fs.existsSync( target )) {
-        files = fs.readdirSync( src );
+        var files = fs.readdirSync( src );
         files.forEach( function ( file ) {
             var fileSrc = src + '/' + file;
             var fileDest = target + '/' + file ;
             if ( fs.lstatSync( fileSrc ).isDirectory() && recursive ) {
                if ( !fs.existsSync( fileDest )) {
-                  console.log( 'Creating directory ' + fileDest );
+                  console.info( 'Creating directory ' + fileDest );
                   fs.mkdirSync( fileDest );
                }
-               copyFiles( fileSrc, fileDest );
+               JsFileTools.prototype.copyDir( fileSrc, fileDest );
             } else {               
-               console.log( 'Copying ' + fileSrc + ' to ' + fileDest );
+               console.info( 'Copying ' + fileSrc + ' to ' + fileDest );
                fs.createReadStream( fileSrc ).pipe( fs.createWriteStream( fileDest ) );
             }
             
