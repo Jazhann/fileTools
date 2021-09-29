@@ -24,6 +24,7 @@ const jsFileTools = require("jsfiletools");
 - modifyFile
 - copyFile
 - copyDir
+- deleteFile
 
 ## jsFileTools.readFile
 
