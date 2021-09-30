@@ -39,7 +39,7 @@ const jsFileTools = require("jsfiletools");
     try {
         var fileData = await jsFileTools.readFile(src);
     } catch (error) {
-        //handle error
+        // handle error
     }
     // fileData type is string
 ```
@@ -59,7 +59,7 @@ const jsFileTools = require("jsfiletools");
     try {
         var result = await jsFileTools.writeFile(src, fileData);
     } catch (error) {
-        //handle error
+        // handle error
     }
 ```
 
@@ -79,7 +79,7 @@ const jsFileTools = require("jsfiletools");
     try {
         var result = await jsFileTools.modifyFile(fileSrc, dataToReplace);
     } catch (error) {
-        //handle error
+        // handle error
     }
 ```
 
@@ -97,7 +97,7 @@ const jsFileTools = require("jsfiletools");
     try {
         var result = await jsFileTools.copyFile(fileSrc, fileTarget);
     } catch (error) {
-        //handle error
+        // handle error
     }
 ```
 
@@ -114,7 +114,7 @@ const jsFileTools = require("jsfiletools");
     try {
         var result = await jsFileTools.copyDir(dirSrc, dirTarget);
     } catch (error) {
-        //handle error
+        // handle error
     }
 ```
 
@@ -131,7 +131,7 @@ const jsFileTools = require("jsfiletools");
     try {
         var result = await jsFileTools.deleteFile(fileSrc);
     } catch (error) {
-        //handle error
+        // handle error
     }
 ```
 
@@ -147,7 +147,7 @@ const jsFileTools = require("jsfiletools");
     try {
         var result = await jsFileTools.deleteDir(dirSrc);
     } catch (error) {
-        //handle error
+        // handle error
     }
 ```
 
