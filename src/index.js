@@ -30,7 +30,7 @@ JsFileTools.prototype.writeFile = function ( src, data ) {
         if ( error )
           reject( error );
         else
-          resolve( { response: 'ok' } );
+          resolve( { result: 'ok' } );
       });
     });
 }
@@ -43,7 +43,9 @@ JsFileTools.prototype.writeFile = function ( src, data ) {
  */
 JsFileTools.prototype.modifyFile = async function ( src, stringsToReplace ) {
     if ( !Array.isArray( stringsToReplace ) && stringsToReplace.length < 1) {
-        throw new Error('second argument must be an array and not being empty');
+        var message = 'Second argument must be an array and not being empty';
+        console.error( message );
+        throw new Error( message );
     } 
     if (fs.existsSync( src )) {
         console.info( 'Modifying ' + src );
@@ -56,7 +58,7 @@ JsFileTools.prototype.modifyFile = async function ( src, stringsToReplace ) {
         await JsFileTools.prototype.writeFile( src, data );
     } else {
         var message = src + ' not found. Skipping';
-        console.info( message );
+        console.error( message );
         throw new Error( message )
     }
 }
@@ -82,10 +84,10 @@ JsFileTools.prototype.copyFile = function ( src, target, createParentDir = true 
             }
             console.info( 'Copying ' + src + ' to ' + target );
             fs.createReadStream( src ).pipe( fs.createWriteStream( target ) );
-            resolve( { response: 'ok' } );
+            resolve( { result: 'ok' } );
         } else {
             var message = src + ' not found. Skipping';
-            console.info( message );
+            console.error( message );
             reject( message );
         }
     })
@@ -114,26 +116,63 @@ JsFileTools.prototype.copyDir = function ( src, target, recursive = true ) {
                     fs.createReadStream( fileSrc ).pipe( fs.createWriteStream( fileDest ) );
                 }
             } );
-            resolve( { response: 'ok' } );
+            resolve( { result: 'ok' } );
         } else {
             var message = src + ' not found. Skipping';
-            console.info( message );
+            console.error( message );
             reject( message );
         }
     })
 }
 
+/**
+ * Delete a file
+ * @param {*} src source file
+ * @returns 
+ */
 JsFileTools.prototype.deleteFile = function ( src ) {
     return new Promise( function( resolve, reject ) {
-        try {
-            fs.unlinkSync(src);
-            console.info("File removed:", src);
-            resolve( { response: 'ok' } );
-          } catch (error) {
-            console.error(error);
-            reject(error)
-          }
+        if (fs.lstatSync( src ).isDirectory()) {
+            var message = 'Directories can not be deleted use deleteDir';
+            console.error( message );
+            reject( message )
+        } else {
+            try {
+                fs.unlinkSync(src);
+                console.info("File deleted:", src);
+                resolve( { result: 'ok' } );
+            } catch ( error ) {
+                var message = 'Error while deleting ' + src + ', ' + error;
+                console.error( message) ;
+                reject( error )
+            }
+        }
     })
+}
+
+/**
+ * Delete a directory and all inside it
+ * @param {*} src source directory
+ */
+JsFileTools.prototype.deleteDir = function ( src ) {
+    return new Promise( function( resolve, reject ) {
+        if (fs.lstatSync( src ).isDirectory()) {
+            try {
+                fs.rmdirSync(src, { recursive: true });
+                console.info('Directory deleted: ' + src);
+                resolve( { result: 'ok' } );
+            } catch (error) {
+                var message = 'Error while deleting ' + src + ', ' + error;
+                console.error( message );
+                reject( message )
+            }
+        } else {
+            var message = src + ' is not a directory';
+            console.error( message );
+            reject( message )
+        }
+    })
+
 }
 
 

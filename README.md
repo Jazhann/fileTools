@@ -25,6 +25,7 @@ const jsFileTools = require("jsfiletools");
 - copyFile
 - copyDir
 - deleteFile
+- deleteDir
 
 ## jsFileTools.readFile
 
@@ -35,7 +36,11 @@ const jsFileTools = require("jsfiletools");
 
 ```javascript
     var src = './example.js';
-    var fileData = await jsFileTools.readFile(src);
+    try {
+        var fileData = await jsFileTools.readFile(src);
+    } catch (error) {
+        //handle error
+    }
     // fileData type is string
 ```
 
@@ -51,7 +56,11 @@ const jsFileTools = require("jsfiletools");
     var src = './example.js';
     var fileData = 'some random content';
     // fileData type is string
-    var result = await jsFileTools.writeFile(src, fileData);
+    try {
+        var result = await jsFileTools.writeFile(src, fileData);
+    } catch (error) {
+        //handle error
+    }
 ```
 
 ## jsFileTools.modifyFile
@@ -62,11 +71,16 @@ const jsFileTools = require("jsfiletools");
 ## Example
 
 ```javascript
+    // fileSrc param - include route and file name
     var fileSrc = './example.js';
     var dataToReplace = [
         ['^.*TextToReplace.*', 'ReplacementText']
     ]
-    var result = await jsFileTools.modifyFile(fileSrc, dataToReplace);
+    try {
+        var result = await jsFileTools.modifyFile(fileSrc, dataToReplace);
+    } catch (error) {
+        //handle error
+    }
 ```
 
 ## jsFileTools.copyFile
@@ -80,7 +94,11 @@ const jsFileTools = require("jsfiletools");
     // fileSrc and fileTarget params - include route and file name
     var fileSrc = './example.js';
     var fileTarget = './newDir/example.js';
-    var result = await jsFileTools.copyFile(fileSrc, fileTarget);
+    try {
+        var result = await jsFileTools.copyFile(fileSrc, fileTarget);
+    } catch (error) {
+        //handle error
+    }
 ```
 
 ## jsFileTools.copyDir
@@ -91,9 +109,13 @@ const jsFileTools = require("jsfiletools");
 ## Example
 
 ```javascript
-    var fileSrc = './example';
-    var fileTarget = '../newDir';
-    var result = await jsFileTools.copyDir(dirSrc, dirTarget);
+    var dirSrc = './example';
+    var dirTarget = '../newDir';
+    try {
+        var result = await jsFileTools.copyDir(dirSrc, dirTarget);
+    } catch (error) {
+        //handle error
+    }
 ```
 
 ## jsFileTools.deleteFile
@@ -106,8 +128,29 @@ const jsFileTools = require("jsfiletools");
 ```javascript
     // fileSrc param - include route and file name
     var fileSrc = './example.js';
-    var result = await jsFileTools.deleteFile(fileSrc);
+    try {
+        var result = await jsFileTools.deleteFile(fileSrc);
+    } catch (error) {
+        //handle error
+    }
 ```
+
+## jsFileTools.deleteDir
+
+> Delete a directory recursively. Returns a promise.
+
+
+## Example
+
+```javascript
+    var dirSrc = './example';
+    try {
+        var result = await jsFileTools.deleteDir(dirSrc);
+    } catch (error) {
+        //handle error
+    }
+```
+
 
 ### Source Code
 [fileTools()](https://github.com/Jazhann/jsfiletools)
